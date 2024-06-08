@@ -1,0 +1,9 @@
+.quiz-table {
+    background-color: blue;
+}
+
+.quiz-table td {
+    color: goldenrod;
+    padding: 5px;
+    border: 1px solid gold;
+}

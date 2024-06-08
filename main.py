@@ -1,5 +1,4 @@
 import logging
-import os
 from pathlib import Path
 
 import uvicorn
@@ -9,6 +8,8 @@ from starlette.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 from starlette.websockets import WebSocket
 
+from ui.quiz.quiz import make_fake
+
 app = FastAPI()
 
 app.mount("/ui/static", StaticFiles(directory="ui/static"), name="static")
@@ -16,17 +17,22 @@ app.mount("/ui/static", StaticFiles(directory="ui/static"), name="static")
 templates = Jinja2Templates(directory="ui/templates")
 
 
-@app.get("/test")
-async def hello_test(request: Request):
+@app.get("/")
+async def root_page(request: Request):
     return templates.TemplateResponse(
-        name="test.html", context={"request": request}
+        name="root.html", context={"request": request}
     )
 
-@app.post("/clicked")
+
+@app.post("/table")
 async def clicked(request: Request):
+    rows = make_fake()
+    print(rows)
     return templates.TemplateResponse(
-        name="test2.html", context={"request": request}
+        name="main_table.html", context={"request": request,
+                                         "rows": rows}
     )
+
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):

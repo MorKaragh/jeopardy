@@ -1,0 +1,13 @@
+<html>
+<head>
+    <script src="{{ url_for('static', path='/js/htmx.min.js') }}" type="text/javascript"></script>
+    <script src="{{ url_for('static', path='/js/ws.js') }}" type="text/javascript"></script>
+    <link href="{{ url_for('static', path='/css/styles.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div id="abram"></div>
+    <button hx-post="/table" hx-swap="outerHTML" hx-target="#abram" hx-confirm="Are you sure?">
+        Click Me
+    </button>
+</body>
+</html>
