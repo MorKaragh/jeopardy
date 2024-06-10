@@ -2,8 +2,10 @@
 {% for row in rows %}
 <tr>
   {% for question in row %}
-    <td id="question-cell-{{ question.id }}" hx-get="/questions/{{ question.id }}" hx-target="#question-text">
-      {{ question.cost }}
+    <td>
+      <div id="question-cell-{{ question.id }}" hx-get="/questions/{{ question.id }}" hx-target="#question-text">
+        {{ question.cost }}
+      </div>
     </td>
   {% endfor %}
 </tr>
