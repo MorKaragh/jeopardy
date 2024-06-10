@@ -1,0 +1,13 @@
+<div id="question-text-opened">
+    <div>{{ question.text }}</div>
+    {% if showman %}
+    <div id="question-control">
+        <button id="control-correct-btn" hx-post="/questions/{{question.id}}/answers/yes" hx-target="#question-text">
+            Зачёт!
+        </button>
+        <button id="control-wrong-btn" hx-post="/questions/{{question.id}}/answers/no" hx-target="#question-text">
+            Не правильно!
+        </button>
+    </div>
+    {% endif %}
+</div>

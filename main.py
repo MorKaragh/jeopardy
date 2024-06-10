@@ -1,3 +1,4 @@
+import datetime
 import logging
 from pathlib import Path
 
@@ -24,13 +25,45 @@ async def root_page(request: Request):
     )
 
 
-@app.post("/table")
-async def clicked(request: Request):
+@app.get("/table")
+async def open_game_table(request: Request):
     rows = make_fake()
-    print(rows)
     return templates.TemplateResponse(
-        name="main_table.html", context={"request": request,
-                                         "rows": rows}
+        name="main_table.html", context={
+            "request": request,
+            "rows": rows,
+        }
+    )
+
+
+@app.get("/questions/{question_id}")
+async def open_question(request: Request,
+                        question_id: str):
+    return templates.TemplateResponse(
+        name="question.html", context={
+            "request": request,
+            "question": {
+                "text": f"ID {question_id} {str(datetime.datetime.now())}",
+                "id": question_id
+            },
+            "showman": True,
+        }
+    )
+
+
+@app.post("/questions/{question_id}/answers/{answer}")
+async def give_answer(request: Request,
+                      question_id: str,
+                      answer: str):
+    print(question_id)
+    return templates.TemplateResponse(
+        name="answer.html", context={
+            "request": request,
+            "question": {
+                "id": question_id
+            },
+            "answer": answer,
+        }
     )
 
 

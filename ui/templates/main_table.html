@@ -1,9 +1,9 @@
-<table class="quiz-table">
+<table id="quiz-table">
 {% for row in rows %}
 <tr>
-  {% for data in row %}
-    <td>
-      {{ data }}
+  {% for question in row %}
+    <td id="question-cell-{{ question.id }}" hx-get="/questions/{{ question.id }}" hx-target="#question-text">
+      {{ question.cost }}
     </td>
   {% endfor %}
 </tr>

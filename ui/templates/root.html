@@ -5,9 +5,9 @@
     <link href="{{ url_for('static', path='/css/styles.css') }}" rel="stylesheet">
 </head>
 <body>
-    <div id="abram"></div>
-    <button hx-post="/table" hx-swap="outerHTML" hx-target="#abram" hx-confirm="Are you sure?">
-        Click Me
-    </button>
+    <div id="question-text"></div>
+    <div id="table-container">
+        <div id="game-table" hx-get="/table" hx-swap="outerHTML" hx-target="#game-table" hx-trigger="load"></div>
+    </div>
 </body>
 </html>

@@ -1,9 +1,41 @@
-.quiz-table {
-    background-color: blue;
+#table-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-.quiz-table td {
+#quiz-table {
+    background-color: blue;
+    margin: 0 auto;
+}
+
+#quiz-table td {
     color: goldenrod;
-    padding: 5px;
+    font-size: 2vw;
+    padding: 1vw;
     border: 1px solid gold;
+    cursor: pointer;
+}
+
+#question-text {
+    display: hidden;
+}
+
+#question-text-opened {
+    background-color: blue;
+    border: 3px solid gold;
+    border-radius: 10px;
+    text-align: center;
+    color: goldenrod;
+    font-size: 2vw;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: all ease-in 1s ;
 }

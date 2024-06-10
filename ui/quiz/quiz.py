@@ -4,5 +4,6 @@ def make_fake():
         row = []
         result.append(row)
         for z in range(1, 6):
-            row.append(f"fake {i} {z}")
+            row.append({"cost": f"fake {i} {z}",
+                        "id": int(str(i) + str(z))})
     return result
