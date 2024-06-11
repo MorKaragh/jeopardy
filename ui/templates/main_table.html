@@ -3,7 +3,7 @@
 <tr>
   {% for question in row %}
     <td>
-      <div id="question-cell-{{ question.id }}" hx-get="/questions/{{ question.id }}" hx-target="#question-text">
+      <div id="question-cell-{{ question.id }}" class="clickable" hx-get="/questions/{{ question.id }}" hx-target="#question-text">
         {{ question.cost }}
       </div>
     </td>
