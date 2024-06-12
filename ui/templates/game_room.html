@@ -5,7 +5,18 @@
         <input type="hidden" name="player_name" value="{{ player_name }}">
     </form>
     <div id="question-text"></div>
-    <div id="table-container">
-        <div id="game-table" hx-get="/table/{{ game.room_name }}" hx-swap="outerHTML" hx-target="#game-table" hx-trigger="load"></div>
+    <div id="room-container">
+        <div id="players-container">
+            <div id="players-list">
+            </div>
+        </div>
+        <div id="table-container">
+            <div id="game-table"
+                 hx-get="/table/{{ game.room_name }}"
+                 hx-swap="outerHTML"
+                 hx-target="#game-table"
+                 hx-trigger="load">
+            </div>
+        </div>
     </div>
 </div>

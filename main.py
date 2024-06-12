@@ -1,9 +1,7 @@
-import dataclasses
-import datetime
 import json
 import logging
 from pathlib import Path
-from typing import Optional, Annotated
+from typing import Annotated
 
 import uvicorn
 from fastapi import FastAPI, Form
@@ -14,7 +12,7 @@ from starlette.templating import Jinja2Templates
 from starlette.websockets import WebSocket
 
 from models import Player
-from ui.quiz.quiz import make_fake_game
+from quiz import make_fake_game
 
 app = FastAPI()
 
@@ -90,20 +88,6 @@ async def open_game_table(request: Request,
     )
 
 
-@app.get("/questions/{question_id}")
-async def open_question(request: Request,
-                        question_id: str,
-                        room_name: str):
-    return templates.TemplateResponse(
-        name="question.html", context={
-            "request": request,
-            "room_name": room_name,
-            "question": games[room_name].find_question_by_id(question_id),
-            "showman": True,
-        }
-    )
-
-
 @app.websocket("/game-ws")
 async def websocket_endpoint(websocket: WebSocket):
     connections[websocket] = {}
@@ -117,8 +101,10 @@ async def process_received_message(message: dict, websocket: WebSocket):
     print(f"received {message}")
     match message["msg_type"]:
         case "room_hello":
+            room = message["room_name"]
             connections[websocket]["player_name"] = message["player_name"]
-            connections[websocket]["room_name"] = message["room_name"]
+            connections[websocket]["room_name"] = room
+            await send_game_updates(room, templates.get_template("players.html").render({"game": games[room]}))
         case "question_answer":
             room = message["room_name"]
             answer = message["answer"]
@@ -145,7 +131,10 @@ async def send_game_updates(room_name: str, html: str):
     sockets = all_room_sockets(room_name)
     for socket in sockets:
         print(f"sending {html} to {socket}")
-        await socket.send_text(html)
+        try:
+            await socket.send_text(html)
+        except RuntimeError:
+            pass
 
 
 def all_room_sockets(room_name) -> list[WebSocket]:

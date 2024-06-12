@@ -1,28 +1,63 @@
 :root {
     --background-color: blue;
+    --player-color: aliceblue;
     --main-text-color: gold;
     --border-color: gold;
 }
 
-#table-container, 
-#login-container {
+
+
+/* game room */
+
+#room-container {
+  display: flex;
+}
+
+#players-container {
+  padding: 2vh;
+  width: 10vw;
+}
+
+.player-div {
+  padding: 1vh;
+  background-color: var(--player-color);
+  border-radius: 1vh;
+  margin-bottom: 1vh;
+}
+
+.player-name {
+  font-size: larger;
+  font-weight: bolder;
+  margin: 0 0 10px 0;
+}
+
+.player-score {
+  font-size: larger;
+  color:darkgreen;
+  font-weight: bolder;
+}
+
+#table-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    width: 90vw;
 }
 
 #quiz-table {
     background-color: var(--background-color);
     margin: 0 auto;
+    border-collapse: collapse;
 }
 
 #quiz-table td {
     color: var(--main-text-color);
-    font-size: 2vw;
-    padding: 1vw;
+    font-size: 1.5vw;
+    padding: 0.2vw;
     border: 1px solid var(--border-color);
+    border-collapse: collapse;
     width: 8vw;
 }
 
@@ -32,7 +67,7 @@
   width: 100%;
   height: 100%;
   color: var(--main-text-color);
-  font-size: 7vh;
+  font-size: 5vh;
 }
 
 #question-text {
@@ -56,8 +91,16 @@
     transition: all ease-in 1s;
 }
 
-.clickable {
-    cursor: pointer;
+
+
+/* login form */
+
+#login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 .login-form {
@@ -89,5 +132,13 @@
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 4px;
+  cursor: pointer;
+}
+
+
+
+/* utils */
+
+.clickable {
   cursor: pointer;
 }
