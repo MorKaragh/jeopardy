@@ -1,3 +1,5 @@
+import uuid
+
 from models import Game, Topic, Question
 from faker import Faker
 
@@ -5,9 +7,11 @@ fake = Faker()
 
 
 def make_fake_question(cost):
-    return Question(cost=cost,
-                    text=fake.text(max_nb_chars=150),
-                    answer=fake.text(max_nb_chars=255))
+    return Question(
+        id=uuid.uuid4(),
+        cost=cost,
+        text=fake.text(max_nb_chars=150),
+        answer=fake.text(max_nb_chars=255))
 
 
 def make_fake_topic():

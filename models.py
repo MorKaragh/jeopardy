@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 
 class Question(BaseModel):
-    id: UUID = uuid.uuid4()
+    id: UUID
     cost: int
     text: str
     was_asked: bool = False

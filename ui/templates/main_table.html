@@ -6,9 +6,11 @@
   </td>
   {% for question in topic.questions %}
     <td class="question-cost-td">
+      {% if not question.was_asked %}
       <div id="question-cell-{{ question.id }}" class="clickable" hx-get="/questions/{{ question.id }}?room_name={{ game.room_name }}" hx-target="#question-text">
         {{ question.cost }}
       </div>
+      {% endif %}
     </td>
   {% endfor %}
 </tr>
