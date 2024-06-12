@@ -13,6 +13,7 @@ from starlette.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 from starlette.websockets import WebSocket
 
+from models import Player
 from ui.quiz.quiz import make_fake_game
 
 app = FastAPI()
@@ -50,9 +51,30 @@ async def create_room(request: Request,
         name="game_room.html",
         context={
             "request": request,
-            "game": games[room_name]
+            "game": games[room_name],
+            "player_name": "showman",
         }
     )
+
+@app.post("/join")
+async def join_room(request: Request,
+                    response: Response,
+                    room_name: Annotated[str, Form()],
+                    player_name: Annotated[str, Form()]):
+    if room_name in games:
+        game = games[room_name]
+        player = game.find_player(player_name)
+        if not player:
+            player = Player(name=player_name, score=0)
+            game.players.append(player)
+        templates.TemplateResponse(
+            name="game_room.html",
+            context={
+                "request": request,
+                "game": games[room_name],
+                "player_name": player_name,
+            }
+        )
 
 
 @app.get("/table/{room_name}")
@@ -94,7 +116,7 @@ async def process_received_message(message: dict, websocket: WebSocket):
     print(f"received {message}")
     match message["msg_type"]:
         case "room_hello":
-            connections[websocket]["user_name"] = message["user_name"]
+            connections[websocket]["player_name"] = message["player_name"]
             connections[websocket]["room_name"] = message["room_name"]
         case "question_answer":
             room = message["room_name"]
@@ -102,8 +124,7 @@ async def process_received_message(message: dict, websocket: WebSocket):
             question_id = message["question_id"]
             question = games[room].find_question_by_id(question_id)
             question.was_asked = True
-            result = templates.get_template("close_question_signal.html").render()
-            await send_game_updates(room, result)
+            await send_game_updates(room, templates.get_template("close_question_signal.html").render())
             await send_game_updates(room, templates.get_template("main_table.html").render({
                 "game": games[room],
             }))

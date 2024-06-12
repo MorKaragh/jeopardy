@@ -2,7 +2,7 @@
     <form id="room-init" hx-trigger="load" ws-send>
         <input type="hidden" name="msg_type" value="room_hello">
         <input type="hidden" name="room_name" value="{{ game.room_name }}">
-        <input type="hidden" name="user_name" value="{{ user_name }}">
+        <input type="hidden" name="player_name" value="{{ player_name }}">
     </form>
     <div id="question-text"></div>
     <div id="table-container">
