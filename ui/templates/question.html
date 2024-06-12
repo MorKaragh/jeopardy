@@ -2,12 +2,20 @@
     <div>{{ question.text }}</div>
     {% if showman %}
     <div id="question-control">
-        <button id="control-correct-btn" hx-post="/questions/{{question.id}}/answers/yes" hx-target="#question-text">
-            Зачёт!
-        </button>
-        <button id="control-wrong-btn" hx-post="/questions/{{question.id}}/answers/no" hx-target="#question-text">
-            Не правильно!
-        </button>
+        <form ws-send>
+            <input type="hidden" name="msg_type" value="question_answer">
+            <input type="hidden" name="room_name" value="{{ room_name }}">
+            <input type="hidden" name="answer" value="correct">
+            <input type="hidden" name="question_id" value="{{ question.id }}">
+            <input type="submit" value="Корректно">
+        </form>
+        <form ws-send>
+            <input type="hidden" name="msg_type" value="question_answer">
+            <input type="hidden" name="room_name" value="{{ room_name }}">
+            <input type="hidden" name="answer" value="wrong">
+            <input type="hidden" name="question_id" value="{{ question.id }}">
+            <input type="submit" value="Нет ответа">
+        </form>
     </div>
     {% endif %}
 </div>

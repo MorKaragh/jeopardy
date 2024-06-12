@@ -1,11 +1,11 @@
-<div hx-ext="ws" ws-connect="/game">
+<div hx-ext="ws" ws-connect="/game-ws">
     <form id="room-init" hx-trigger="load" ws-send>
         <input type="hidden" name="msg_type" value="room_hello">
-        <input type="hidden" name="room_name" value="{{ room_name }}">
+        <input type="hidden" name="room_name" value="{{ game.room_name }}">
         <input type="hidden" name="user_name" value="{{ user_name }}">
     </form>
     <div id="question-text"></div>
     <div id="table-container">
-        <div id="game-table" hx-get="/table" hx-swap="outerHTML" hx-target="#game-table" hx-trigger="load"></div>
+        <div id="game-table" hx-get="/table/{{ game.room_name }}" hx-swap="outerHTML" hx-target="#game-table" hx-trigger="load"></div>
     </div>
 </div>
