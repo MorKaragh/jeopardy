@@ -56,6 +56,7 @@ async def create_room(request: Request,
         }
     )
 
+
 @app.post("/join")
 async def join_room(request: Request,
                     response: Response,
@@ -67,7 +68,7 @@ async def join_room(request: Request,
         if not player:
             player = Player(name=player_name, score=0)
             game.players.append(player)
-        templates.TemplateResponse(
+        return templates.TemplateResponse(
             name="game_room.html",
             context={
                 "request": request,
@@ -84,7 +85,7 @@ async def open_game_table(request: Request,
         name="main_table.html",
         context={
             "request": request,
-            "game": games[room_name],
+            "game": games[room_name]
         }
     )
 
@@ -126,7 +127,15 @@ async def process_received_message(message: dict, websocket: WebSocket):
             question.was_asked = True
             await send_game_updates(room, templates.get_template("close_question_signal.html").render())
             await send_game_updates(room, templates.get_template("main_table.html").render({
-                "game": games[room],
+                "game": games[room]
+            }))
+        case "open_question":
+            room = message["room_name"]
+            question_id = message["question_id"]
+            await send_game_updates(room, templates.get_template("question.html").render({
+                "room_name": room,
+                "question": games[room].find_question_by_id(question_id),
+                "showman": True,
             }))
         case _:
             pass

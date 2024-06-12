@@ -1,11 +1,11 @@
 <div id="login-container">
     <div id="game-login">
-        <form hx-post="/rooms" hx-target="body" id="create-room-form" class="login-form">
+        <form id="create-room-form" hx-post="/rooms" hx-target="body" class="login-form">
             <label>Создать комнату</label>
             <input id="room-name-fld" type="text" name="room_name" placeholder="имя комнаты">
             <input type="submit" value="Создать комнату">
         </form>
-        <form hx-post="/join" id="join-room-form" class="login-form">
+        <form id="join-room-form" hx-post="/join" hx-target="body" class="login-form">
             <label>Войти в комнату</label>
             <input id="join-room-name-fld" type="text" name="room_name" placeholder="имя комнаты">
             <input id="join-user-name-fld" type="text" name="player_name" placeholder="представьтесь">

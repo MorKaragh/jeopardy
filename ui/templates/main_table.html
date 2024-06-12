@@ -7,9 +7,18 @@
   {% for question in topic.questions %}
     <td class="question-cost-td">
       {% if not question.was_asked %}
-      <div id="question-cell-{{ question.id }}" class="clickable" hx-get="/questions/{{ question.id }}?room_name={{ game.room_name }}" hx-target="#question-text">
+      <form ws-send>
+            <input type="hidden" name="msg_type" value="open_question">
+            <input type="hidden" name="room_name" value="{{ game.room_name }}">
+            <input type="hidden" name="question_id" value="{{ question.id }}">
+            <input class="clickable question-cost-input" type="submit" value="{{ question.cost }}">
+      </form>
+      <!--div id="question-cell-{{ question.id }}"
+           class="clickable"
+           hx-get="/questions/{{ question.id }}?room_name={{ game.room_name }}"
+           hx-target="#question-text">
         {{ question.cost }}
-      </div>
+      </div-->
       {% endif %}
     </td>
   {% endfor %}
