@@ -1,16 +1,30 @@
 :root {
     --background-color: #1c1c87;
-    --player-color: #bcd2fc;
+    --player-color: #1c1c87;
     --main-text-color: gold;
     --border-color: #cfc79d;
+    --screen-background: #232323;
+    --secondary-text-color: white;
 }
 
+body,html {
+  margin: 0;
+  padding: 0;
+}
 
+* {
+  box-sizing: border-box;
+}
 
 /* game room */
 
+#room-init {
+  margin: 0;
+}
+
 #room-container {
   display: flex;
+  background-color: var(--screen-background);
 }
 
 #players-container {
@@ -21,7 +35,8 @@
 .player-div {
   padding: 1vh;
   background-color: var(--player-color);
-  border-radius: 1vh;
+  border: 2px solid var(--border-color);
+  border-radius: 0.3vh;
   margin-bottom: 1vh;
 }
 
@@ -29,11 +44,12 @@
   font-size: larger;
   font-weight: bolder;
   margin: 0 0 10px 0;
+  color: var(--main-text-color)
 }
 
 .player-score {
   font-size: larger;
-  color:darkgreen;
+  color: var(--secondary-text-color);
   font-weight: bolder;
 }
 
@@ -80,7 +96,7 @@
 .topic-name-td {
     width: 20vw;
     font-size: 2vw;
-    color:white !important;
+    color: var(--secondary-text-color) !important;
 }
 
 .question-cost-td {
