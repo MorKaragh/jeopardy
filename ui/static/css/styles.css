@@ -46,6 +46,10 @@
     width: 90vw;
 }
 
+
+
+/* quiz table */
+
 #quiz-table {
     background-color: var(--background-color);
     margin: 0 auto;
@@ -54,21 +58,38 @@
 
 #quiz-table td {
     color: var(--main-text-color);
-    font-size: 1.5vw;
-    padding: 0.2vw;
+    padding: 1vw;
     border: 1px solid var(--border-color);
     border-collapse: collapse;
-    width: 8vw;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
-.question-cost-input {
+.question-cost-input,
+.player-table-cell {
   background-color: transparent;
   border: 0;
   width: 100%;
-  height: 100%;
   color: var(--main-text-color);
-  font-size: 5vh;
+  font-size: 2vw;
 }
+
+.topic-name-td {
+    width: 20vw;
+    font-size: 2vw;
+}
+
+.question-cost-td {
+    width: 8vw;
+    text-align: center;
+}
+
+.table-showman-cost-form {
+    width: 8vw;
+    margin: 0;
+}
+
+
+/* opened question */
 
 #question-text {
     display: hidden;

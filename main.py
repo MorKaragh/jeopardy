@@ -1,7 +1,7 @@
 import json
 import logging
 from pathlib import Path
-from typing import Annotated
+from typing import Annotated, Callable
 
 import uvicorn
 from fastapi import FastAPI, Form
@@ -11,7 +11,7 @@ from starlette.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 from starlette.websockets import WebSocket
 
-from models import Player
+from models import Player, Game
 from quiz import make_fake_game
 
 app = FastAPI()
@@ -78,12 +78,14 @@ async def join_room(request: Request,
 
 @app.get("/table/{room_name}")
 async def open_game_table(request: Request,
-                          room_name: str):
+                          room_name: str,
+                          player_name: str):
     return templates.TemplateResponse(
         name="main_table.html",
         context={
             "request": request,
-            "game": games[room_name]
+            "game": games[room_name],
+            "player_name": player_name,
         }
     )
 
@@ -112,9 +114,7 @@ async def process_received_message(message: dict, websocket: WebSocket):
             question = games[room].find_question_by_id(question_id)
             question.was_asked = True
             await send_game_updates(room, templates.get_template("close_question_signal.html").render())
-            await send_game_updates(room, templates.get_template("main_table.html").render({
-                "game": games[room]
-            }))
+            await send_to_all(room, main_table_renderer)
         case "open_question":
             room = message["room_name"]
             question_id = message["question_id"]
@@ -125,6 +125,25 @@ async def process_received_message(message: dict, websocket: WebSocket):
             }))
         case _:
             pass
+
+
+def main_table_renderer(game: Game, player_name: str):
+    return templates.get_template("main_table.html").render({
+        "game": game,
+        "player_name": player_name
+    })
+
+
+async def send_to_all(room: str, render_fun: Callable):
+    sockets = all_room_sockets(room)
+    for socket in sockets:
+        socket_metadata = connections[socket]
+        player_name = socket_metadata.get("player_name")
+        if player_name:
+            try:
+                await socket.send_text(render_fun(games[room], player_name))
+            except RuntimeError:
+                pass
 
 
 async def send_game_updates(room_name: str, html: str):
