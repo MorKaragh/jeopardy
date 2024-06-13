@@ -1,6 +1,7 @@
-<div id="question-text" class="question-text-opened">
-    <div>{{ question.text }}</div>
+<div id="question-opened" class="question-text-opened">
+    <div id="question-text">{{ question.text }}</div>
     {% if showman %}
+    <div id="question-answer">{{ question.answer }}</div>
     <div id="question-control">
         <form ws-send>
             <input type="hidden" name="msg_type" value="question_answer">

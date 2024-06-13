@@ -1,8 +1,8 @@
 :root {
-    --background-color: blue;
-    --player-color: aliceblue;
+    --background-color: #1c1c87;
+    --player-color: #bcd2fc;
     --main-text-color: gold;
-    --border-color: gold;
+    --border-color: #cfc79d;
 }
 
 
@@ -73,9 +73,14 @@
   font-size: 2vw;
 }
 
+.question-cost-input:hover {
+  font-weight: bolder;
+}
+
 .topic-name-td {
     width: 20vw;
     font-size: 2vw;
+    color:white !important;
 }
 
 .question-cost-td {
@@ -91,8 +96,25 @@
 
 /* opened question */
 
-#question-text {
+#question-opened {
     display: hidden;
+}
+
+#question-text {
+    margin: 10vh;
+}
+
+#question-answer {
+    margin: 10vh;
+    font-size: smaller;
+    color:#ccc !important;
+}
+
+#question-control {
+    display: flex;
+    flex-direction: row;
+    width: 10vw;
+    justify-content: space-between;
 }
 
 .question-text-opened {
