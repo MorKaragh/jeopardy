@@ -1,22 +1,17 @@
 <div id="question-opened" class="question-text-opened">
     <div id="question-text">{{ question.text }}</div>
-    {% if showman %}
-    <div id="question-answer">{{ question.answer }}</div>
-    <div id="question-control">
-        <form ws-send>
-            <input type="hidden" name="msg_type" value="question_answer">
-            <input type="hidden" name="room_name" value="{{ room_name }}">
-            <input type="hidden" name="answer" value="correct">
-            <input type="hidden" name="question_id" value="{{ question.id }}">
-            <input type="submit" value="Корректно">
-        </form>
-        <form ws-send>
-            <input type="hidden" name="msg_type" value="question_answer">
-            <input type="hidden" name="room_name" value="{{ room_name }}">
-            <input type="hidden" name="answer" value="wrong">
-            <input type="hidden" name="question_id" value="{{ question.id }}">
-            <input type="submit" value="Нет ответа">
-        </form>
-    </div>
+    {% if player_name == "showman" %}
+        <div id="question-answer">{{ question.answer }}</div>
     {% endif %}
+    <div id="question-control">
+        {% if player_name == "showman" %}
+        <form ws-send>
+            <input type="hidden" name="msg_type" value="question_ready">
+            <input type="hidden" name="room_name" value="{{ room_name }}">
+            <input type="hidden" name="question_id" value="{{ question.id }}">
+            <input type="submit" class="control-btn btn-red clickable" value="Вопрос озвучен">
+        </form>
+        {% endif %}
+    </div>
+
 </div>

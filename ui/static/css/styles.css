@@ -16,11 +16,11 @@ body,html {
   box-sizing: border-box;
 }
 
-/* game room */
-
-#room-init {
-  margin: 0;
+form {
+    margin: 0;
 }
+
+/* game room */
 
 #room-container {
   display: flex;
@@ -84,7 +84,6 @@ body,html {
 .player-table-cell {
   background-color: transparent;
   border: 0;
-  width: 100%;
   color: var(--main-text-color);
   font-size: 2vw;
 }
@@ -129,8 +128,12 @@ body,html {
 #question-control {
     display: flex;
     flex-direction: row;
-    width: 10vw;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
+}
+
+#answerer {
+  margin: 0 1vw 0 1vw;
 }
 
 .question-text-opened {
@@ -148,6 +151,35 @@ body,html {
     justify-content: center;
     align-items: center;
     transition: all ease-in 1s;
+}
+
+.control-btn {
+  font-size: larger;
+  padding: 1vh;
+  border-radius: 1vw;
+  margin: 0 1vw 0 1vw;
+}
+
+.btn-red {
+  background-color: rgb(196, 112, 112);
+  color: black;
+  border: 2px solid red;
+}
+
+.btn-red:hover {
+  background-color: indianred;
+  color: black;
+}
+
+.btn-green {
+  background-color: rgb(112, 196, 119);
+  color: black;
+  border: 2px solid green;
+}
+
+.btn-green:hover {
+  background-color: rgb(92, 205, 98);
+  color: black;
 }
 
 
@@ -171,6 +203,7 @@ body,html {
   background-color:#ccc;
   border-radius: 0.2vh;
   padding: 1vh;
+  margin-bottom: 5vh;
 }
 
 .login-form label {

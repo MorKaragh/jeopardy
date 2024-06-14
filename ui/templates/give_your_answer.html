@@ -1,0 +1,29 @@
+<!--suppress XmlDuplicatedId -->
+
+{% if player_name == "showman" %}
+
+    <div id="question-control" hx-swap="settle:1000ms">
+        <form ws-send>
+            <input type="hidden" name="msg_type" value="question_answer">
+            <input type="hidden" name="room_name" value="{{ room_name }}">
+            <input type="hidden" name="answer" value="no_answer">
+            <input type="hidden" name="answerer_name" value="">
+            <input type="hidden" name="question_id" value="{{ question.id }}">
+            <input type="hidden" name="player_name" value="{{ player_name }}">
+            <input type="submit" class="control-btn btn-red clickable" value="Нет ответа">
+        </form>
+    </div>
+
+{% else %}
+
+    <div id="question-control">
+        <form ws-send>
+            <input type="hidden" name="msg_type" value="I_know_answer">
+            <input type="hidden" name="room_name" value="{{ room_name }}">
+            <input type="hidden" name="player_name" value="{{ player_name }}">
+            <input type="hidden" name="question_id" value="{{ question.id }}">
+            <input type="submit" class="control-btn btn-red clickable" value="Я знаю ответ!">
+        </form>
+    </div>
+
+{% endif %}

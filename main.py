@@ -11,7 +11,7 @@ from starlette.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 from starlette.websockets import WebSocket
 
-from models import Player, Game
+from models import Player, Game, Question
 from quiz import make_fake_game
 
 app = FastAPI()
@@ -41,7 +41,6 @@ async def login_form(request: Request):
 
 @app.post("/rooms")
 async def create_room(request: Request,
-                      response: Response,
                       room_name: Annotated[str, Form()]):
     if room_name not in games:
         games[room_name] = make_fake_game(room_name)
@@ -57,7 +56,6 @@ async def create_room(request: Request,
 
 @app.post("/join")
 async def join_room(request: Request,
-                    response: Response,
                     room_name: Annotated[str, Form()],
                     player_name: Annotated[str, Form()]):
     if room_name in games:
@@ -100,31 +98,90 @@ async def websocket_endpoint(websocket: WebSocket):
 
 
 async def process_received_message(message: dict, websocket: WebSocket):
-    print(f"received {message}")
     match message["msg_type"]:
         case "room_hello":
             room = message["room_name"]
             connections[websocket]["player_name"] = message["player_name"]
             connections[websocket]["room_name"] = room
-            await send_game_updates(room, templates.get_template("players.html").render({"game": games[room]}))
-        case "question_answer":
-            room = message["room_name"]
-            answer = message["answer"]
-            question_id = message["question_id"]
-            question = games[room].find_question_by_id(question_id)
-            question.was_asked = True
-            await send_game_updates(room, templates.get_template("close_question_signal.html").render())
-            await send_to_all(room, main_table_renderer)
+            await send_to_all(room, players_renderer)
         case "open_question":
             room = message["room_name"]
             question_id = message["question_id"]
-            await send_game_updates(room, templates.get_template("question.html").render({
-                "room_name": room,
-                "question": games[room].find_question_by_id(question_id),
-                "showman": True,
-            }))
+            await send_to_all(room, make_open_question_renderer(question_id))
+        case "question_ready":
+            room = message["room_name"]
+            question_id = message["question_id"]
+            await send_to_all(room, make_ready_to_answer_renderer(question_id))
+        case "I_know_answer":
+            room = message["room_name"]
+            question_id = message["question_id"]
+            answerer_name = message["player_name"]
+            await send_to_all(room, make_rate_answer_renderer(question_id, answerer_name))
+        case "question_answer":
+            room = message["room_name"]
+            answer = message["answer"]
+            answerer_name = message["answerer_name"]
+            question_id = message["question_id"]
+            question = games[room].find_question_by_id(question_id)
+            question.was_asked = True
+            if answer != "no_answer":
+                change_score(room, question, answerer_name, answer)
+            await send_to_all(room, close_question_renderer)
+            await send_to_all(room, main_table_renderer)
+            await send_to_all(room, players_renderer)
         case _:
             pass
+
+
+def change_score(room, question, answerer_name, answer):
+    game = games[room]
+    player = game.find_player(answerer_name)
+    if answer == "correct":
+        player.score = player.score + question.cost
+    elif answer == "wrong":
+        player.score = player.score - question.cost
+
+
+def make_open_question_renderer(question_id: str):
+    def inner_function(game: Game, player_name: str):
+        return templates.get_template("question.html").render({
+            "room_name": game.room_name,
+            "question": game.find_question_by_id(question_id),
+            "player_name": player_name,
+        })
+
+    return inner_function
+
+
+def close_question_renderer(game: Game, player_name: str):
+    return templates.get_template("close_question_signal.html").render()
+
+
+def players_renderer(game: Game, player_name: str):
+    return templates.get_template("players.html").render({"game": game})
+
+
+def make_ready_to_answer_renderer(question_id: str):
+    def inner_function(game: Game, player_name: str):
+        return templates.get_template("give_your_answer.html").render({
+            "room_name": game.room_name,
+            "question": game.find_question_by_id(question_id),
+            "player_name": player_name,
+        })
+
+    return inner_function
+
+
+def make_rate_answer_renderer(question_id: str, answerer_name: str):
+    def inner_function(game: Game, player_name: str):
+        return templates.get_template("rate_the_answer.html").render({
+            "room_name": game.room_name,
+            "question": game.find_question_by_id(question_id),
+            "player_name": player_name,
+            "answerer_name": answerer_name
+        })
+
+    return inner_function
 
 
 def main_table_renderer(game: Game, player_name: str):
